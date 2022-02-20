@@ -1,12 +1,12 @@
 package main
 
 import (
-	"get.porter.sh/mixin/skeletor/pkg/skeletor"
 	"get.porter.sh/porter/pkg/porter/version"
+	"github.com/LvffY/ansible/pkg/ansible"
 	"github.com/spf13/cobra"
 )
 
-func buildVersionCommand(m *skeletor.Mixin) *cobra.Command {
+func buildVersionCommand(m *ansible.Mixin) *cobra.Command {
 	opts := version.Options{}
 
 	cmd := &cobra.Command{

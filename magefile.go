@@ -1,3 +1,4 @@
+//go:build mage
 // +build mage
 
 package main
@@ -14,8 +15,8 @@ import (
 )
 
 const (
-	mixinName    = "skeletor"
-	mixinPackage = "get.porter.sh/mixin/skeletor"
+	mixinName    = "ansible"
+	mixinPackage = "get.porter.sh/mixin/ansible"
 	mixinBin     = "bin/mixins/" + mixinName
 )
 
@@ -44,14 +45,14 @@ func Test() {
 func Publish() {
 	// You can test out publishing locally by overriding PORTER_RELEASE_REPOSITORY and PORTER_PACKAGES_REMOTE
 	if _, overridden := os.LookupEnv(releases.ReleaseRepository); !overridden {
-		os.Setenv(releases.ReleaseRepository, "github.com/YOURNAME/YOURREPO")
+		os.Setenv(releases.ReleaseRepository, "github.com/LvffY/ansible")
 	}
 	magefile.PublishBinaries()
 
 	// TODO: uncomment out the lines below to publish a mixin feed
 	// Set PORTER_PACKAGES_REMOTE to a repository that will contain your mixin feed, similar to github.com/getporter/packages
 	//if _, overridden := os.LookupEnv(releases.PackagesRemote); !overridden {
-	//	os.Setenv("PORTER_PACKAGES_REMOTE", "git@github.com:YOURNAME/YOUR_PACKAGES_REPOSITORY")
+	//	os.Setenv("PORTER_PACKAGES_REMOTE", "git@github.com:LvffY/YOUR_PACKAGES_REPOSITORY")
 	//}
 	//magefile.PublishMixinFeed()
 }

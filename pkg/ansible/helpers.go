@@ -1,4 +1,4 @@
-package skeletor
+package ansible
 
 import (
 	"testing"

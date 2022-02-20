@@ -4,40 +4,40 @@
     "installStep": {
       "type": "object",
       "properties": {
-        "skeletor": {"$ref": "#/definitions/skeletor"}
+        "ansible": {"$ref": "#/definitions/ansible"}
       },
       "required": [
-        "skeletor"
+        "ansible"
       ],
       "additionalProperties": false
     },
     "upgradeStep": {
       "type": "object",
       "properties": {
-        "skeletor": {"$ref": "#/definitions/skeletor"}
+        "ansible": {"$ref": "#/definitions/ansible"}
       },
       "required": [
-        "skeletor"
+        "ansible"
       ],
       "additionalProperties": false
     },
     "invokeStep": {
       "type": "object",
       "properties": {
-        "skeletor": {"$ref": "#/definitions/skeletor"}
+        "ansible": {"$ref": "#/definitions/ansible"}
       },
       "required": [
-        "skeletor"
+        "ansible"
       ],
       "additionalProperties": false
     },
     "uninstallStep": {
       "type": "object",
       "properties": {
-        "skeletor": {"$ref": "#/definitions/skeletor"}
+        "ansible": {"$ref": "#/definitions/ansible"}
       },
       "required": [
-        "skeletor"
+        "ansible"
       ],
       "additionalProperties": false
     },
@@ -74,7 +74,7 @@
         ]
       }
     },
-    "skeletor": {
+    "ansible": {
       "type": "object",
       "properties": {
         "description": {

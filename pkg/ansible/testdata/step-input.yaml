@@ -1,5 +1,5 @@
 install:
-  - skeletor:
+  - ansible:
       description: "Summon Minion"
       arguments:
       - "man-e-faces"
