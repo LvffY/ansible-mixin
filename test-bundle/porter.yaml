@@ -1,0 +1,24 @@
+name: ansible-test
+version: 0.0.1
+description: "Test bundle ansible"
+registry: lvffy/ansible-mixin
+dockerfile: Dockerfile.tmpl
+
+mixins:
+  - exec
+  - ansible:
+      clientVersion: "<2.10"
+
+install:
+  - exec:
+      description: "Ansible mixin install"
+      command: ansible
+      arguments:
+        - "--version"
+
+uninstall:
+  - exec:
+      description: "Ansible mixin uninstall"
+      command: ansible
+      arguments:
+        - "--version"
