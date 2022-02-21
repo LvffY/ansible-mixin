@@ -2,7 +2,7 @@ package ansible
 
 import (
 	"fmt"
-
+	"strings"
 	"get.porter.sh/porter/pkg/exec/builder"
 	yaml "gopkg.in/yaml.v2"
 )
@@ -19,7 +19,23 @@ type BuildInput struct {
 
 type MixinConfig struct {
 	ClientVersion string `yaml:"clientVersion,omitempty"`
-	OtherPipDependencies string `yaml:"otherPipDependencies,omitempty"`
+	OtherPipDependencies []string `yaml:"otherPipDependencies,omitempty"`
+}
+
+func parseConfig(m *Mixin, input *BuildInput) {
+	if suppliedClientVersion := input.Config.ClientVersion; suppliedClientVersion != "" {
+		m.ClientVersion = suppliedClientVersion
+	}
+
+	if otherPipDependencies := input.Config.OtherPipDependencies; len(otherPipDependencies) > 0 {
+		var otherPipDependenciesWithQuotes []string
+		for _, x := range otherPipDependencies {
+			// Ensure each string to have the format 'str'
+			// Without these quotes, we could fall into issues by having lines like pip install dep<2 and being misinterpreted in shell 
+			otherPipDependenciesWithQuotes = append(otherPipDependenciesWithQuotes, "'" + x + "'") 
+		}
+		m.OtherPipDependencies = otherPipDependenciesWithQuotes
+	}
 }
 
 // Build will generate the necessary Dockerfile lines
@@ -37,17 +53,14 @@ func (m *Mixin) Build() error {
 		return err
 	}
 
-	suppliedClientVersion := input.Config.ClientVersion
-
-	if suppliedClientVersion != "" {
-		m.ClientVersion = suppliedClientVersion
-	}
+	// Parse all configs received from users
+	parseConfig(m, &input)
 
 	// Example of pulling and defining a client version for your mixin
 	fmt.Fprintf(m.Out, `RUN pip install --upgrade --no-cache-dir pip && \
-    pip install --upgrade --no-cache-dir setuptools wheel && \
-    pip install --upgrade --no-cache-dir 'ansible%s'
-    `, m.ClientVersion)
+	pip install --upgrade --no-cache-dir setuptools wheel && \
+	pip install --upgrade --no-cache-dir 'ansible%s' %s
+	`, m.ClientVersion, strings.Join(m.OtherPipDependencies[:], " "))
 
 	return nil
 }

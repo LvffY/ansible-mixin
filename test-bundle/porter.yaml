@@ -8,6 +8,9 @@ mixins:
   - exec
   - ansible:
       clientVersion: "<2.10"
+      otherPipDependencies:
+        - pytest 
+        - pytest-parallel<0.1.1
 
 install:
   - exec:

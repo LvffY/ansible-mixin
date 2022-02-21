@@ -10,6 +10,7 @@ const defaultClientVersion string = ""
 type Mixin struct {
 	*context.Context
 	ClientVersion string
+	OtherPipDependencies []string 
 	//add whatever other context/state is needed here
 }
 
