@@ -11,6 +11,10 @@ mixins:
       otherPipDependencies:
         - pytest 
         - pytest-parallel<0.1.1
+      requirementsFiles:
+        - requirements.txt
+      constraintsFiles:
+        - constraints.txt
 
 install:
   - exec:

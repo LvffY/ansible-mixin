@@ -3,3 +3,5 @@ FROM python:3.9.10
 ARG BUNDLE_DIR
 
 RUN echo "Hello ansible mixin !"
+
+COPY requirements.txt constraints.txt ./

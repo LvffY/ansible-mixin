@@ -10,15 +10,19 @@ const defaultClientVersion string = ""
 type Mixin struct {
 	*context.Context
 	ClientVersion string
-	OtherPipDependencies []string 
+	OtherPipDependencies []string
+	RequirementsFiles []string
+	ConstraintsFiles []string 
 	//add whatever other context/state is needed here
 }
 
-// New azure mixin client, initialized with useful defaults.
+// New ansible mixin client, initialized with useful defaults.
 func New() (*Mixin, error) {
 	return &Mixin{
 		Context:       context.New(),
 		ClientVersion: defaultClientVersion,
+		OtherPipDependencies: []string{},
+		RequirementsFiles: []string{},
+		ConstraintsFiles: []string{},
 	}, nil
-
 }

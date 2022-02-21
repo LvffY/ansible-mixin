@@ -15,9 +15,9 @@ func TestMixin_Build(t *testing.T) {
 	gotOutput := m.TestContext.GetOutput()
 
 	wantOutput := `RUN pip install --upgrade --no-cache-dir pip && \
-    pip install --upgrade --no-cache-dir setuptools wheel && \
-    pip install --upgrade --no-cache-dir 'ansible'
-    `
+	pip install --upgrade --no-cache-dir setuptools wheel && \
+	pip install --upgrade --no-cache-dir 'ansible'   
+	`
 
 	assert.Equal(t, wantOutput, gotOutput)
 }

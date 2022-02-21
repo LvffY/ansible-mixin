@@ -20,6 +20,8 @@ type BuildInput struct {
 type MixinConfig struct {
 	ClientVersion string `yaml:"clientVersion,omitempty"`
 	OtherPipDependencies []string `yaml:"otherPipDependencies,omitempty"`
+	RequirementsFiles []string `yaml:"requirementsFiles,omitempty"`
+	ConstraintsFiles []string `yaml:"constraintsFiles,omitempty"`
 }
 
 func parseConfig(m *Mixin, input *BuildInput) {
@@ -35,6 +37,24 @@ func parseConfig(m *Mixin, input *BuildInput) {
 			otherPipDependenciesWithQuotes = append(otherPipDependenciesWithQuotes, "'" + x + "'") 
 		}
 		m.OtherPipDependencies = otherPipDependenciesWithQuotes
+	}
+
+	if requirementsFiles := input.Config.RequirementsFiles; len(requirementsFiles) > 0 {
+		var requirementsFilesWithPrefix []string
+		for _, x := range requirementsFiles {
+			// Ensure each string to have the format <--requirement 'str'>
+			requirementsFilesWithPrefix = append(requirementsFilesWithPrefix, "--requirement '" + x + "'") 
+		}
+		m.RequirementsFiles = requirementsFilesWithPrefix
+	}
+
+	if constraintsFiles := input.Config.ConstraintsFiles; len(constraintsFiles) > 0 {
+		var constraintsFilesWithPrefix []string
+		for _, x := range constraintsFiles {
+			// Ensure each string to have the format <--constraint 'str'>
+			constraintsFilesWithPrefix = append(constraintsFilesWithPrefix, "--constraint '" + x + "'") 
+		}
+		m.ConstraintsFiles = constraintsFilesWithPrefix
 	}
 }
 
@@ -59,8 +79,12 @@ func (m *Mixin) Build() error {
 	// Example of pulling and defining a client version for your mixin
 	fmt.Fprintf(m.Out, `RUN pip install --upgrade --no-cache-dir pip && \
 	pip install --upgrade --no-cache-dir setuptools wheel && \
-	pip install --upgrade --no-cache-dir 'ansible%s' %s
-	`, m.ClientVersion, strings.Join(m.OtherPipDependencies[:], " "))
+	pip install --upgrade --no-cache-dir 'ansible%s' %s %s %s
+	`, 
+	m.ClientVersion, 
+	strings.Join(m.OtherPipDependencies[:], " "), 
+	strings.Join(m.RequirementsFiles[:], " "), 
+	strings.Join(m.ConstraintsFiles[:], " "))
 
 	return nil
 }
