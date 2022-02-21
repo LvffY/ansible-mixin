@@ -29,7 +29,7 @@ func buildRootCommand(in io.Reader) (*cobra.Command, error) {
 	m.In = in
 	cmd := &cobra.Command{
 		Use:  "ansible",
-		Long: "A skeleton mixin to use for building other mixins for porter 👩🏽‍✈️",
+		Long: "Ansible porter mixin to run all the playbooks you need ! ✨",
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
 			// Enable swapping out stdout/stderr for testing
 			m.Out = cmd.OutOrStdout()
