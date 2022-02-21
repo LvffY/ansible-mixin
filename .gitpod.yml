@@ -16,8 +16,8 @@ vscode:
     - GitHub.vscode-pull-request-github
 
 tasks:
-  - name: Build app
-    init: go get && go build ./... && go test ./...
-    command: go run
+  - name: Build mixin
+    init: go mod download
+    command: go build install
   - name: Install porter
     command: curl -L https://cdn.porter.sh/latest/install-linux.sh | bash

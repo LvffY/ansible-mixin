@@ -19,6 +19,7 @@ type BuildInput struct {
 
 type MixinConfig struct {
 	ClientVersion string `yaml:"clientVersion,omitempty"`
+	OtherPipDependencies string `yaml:"otherPipDependencies,omitempty"`
 }
 
 // Build will generate the necessary Dockerfile lines
