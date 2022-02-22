@@ -19,5 +19,3 @@ tasks:
   - name: Build mixin
     init: go mod download
     command: go build install
-  - name: Install porter
-    command: curl -L https://cdn.porter.sh/latest/install-linux.sh | bash
