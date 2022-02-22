@@ -1,0 +1,8 @@
+install:
+  - ansible:
+      description: "Run our ansible galaxy command"
+      galaxy: 
+        arguments:
+          - "collection"
+          - "install"
+          - "community.general"

@@ -1,0 +1,8 @@
+install:
+  - ansible:
+      description: "Run our ansible adhoc command"
+      playbook: 
+        arguments:
+          - "playbook.yml"
+        flags:
+          inventory: "hosts"

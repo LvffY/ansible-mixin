@@ -34,8 +34,11 @@ func TestMixin_ValidateSchema(t *testing.T) {
 		file      string
 		wantError string
 	}{
-		{"install", "testdata/step-input.yaml", ""},
-		{"invalid property", "testdata/invalid-input.yaml", "Additional property args is not allowed"},
+		{"Valid ansible adhoc command", "testdata/step-input-ansible-adhoc.yaml", ""},
+		{"Valid ansible playbook command", "testdata/step-input-ansible-galaxy.yaml", ""},
+		{"Valid ansible galaxy command", "testdata/step-input-ansible-playbook.yaml", ""},
+		{"Invalid ansible property", "testdata/invalid-ansible-input.yaml", "Additional property args is not allowed"},
+		{"Invalid ansible command", "testdata/invalid-ansible-command.yaml", "Additional property ansible-foobar is not allowed"},
 	}
 
 	for _, tc := range testcases {

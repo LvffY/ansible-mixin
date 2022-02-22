@@ -1,0 +1,9 @@
+install:
+  - ansible:
+      description: "Run our ansible playbook"
+      adhoc: 
+        arguments:
+          - "localhost"
+        flags:
+          module-name: "debug"
+          args: "msg='Hello from ansible AdHoc command !'"

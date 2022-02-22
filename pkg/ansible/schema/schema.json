@@ -80,23 +80,74 @@
         "description": {
           "$ref": "#/definitions/stepDescription"
         },
-        "arguments": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "flags": {
+        "adhoc": {
           "type": "object",
-          "additionalProperties": {
-            "type": ["null","boolean","number","string"]
-          }
+          "properties": {
+            "arguments": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "flags": {
+              "type": "object",
+              "additionalProperties": {
+                "type": ["null","boolean","number","string"]
+              }
+            },
+            "outputs": {
+              "$ref": "#/definitions/outputs"
+            }
+          },
+          "additionalProperties": false
         },
-        "outputs": {
-          "$ref": "#/definitions/outputs"
+        "playbook": {
+          "type": "object",
+          "properties": {
+            "arguments": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "flags": {
+              "type": "object",
+              "additionalProperties": {
+                "type": ["null","boolean","number","string"]
+              }
+            },
+            "outputs": {
+              "$ref": "#/definitions/outputs"
+            }
+          },
+          "additionalProperties": false
+        },
+        "galaxy": {
+          "type": "object",
+          "properties": {
+            "arguments": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "flags": {
+              "type": "object",
+              "additionalProperties": {
+                "type": ["null","boolean","number","string"]
+              }
+            },
+            "outputs": {
+              "$ref": "#/definitions/outputs"
+            }
+          },
+          "additionalProperties": false
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": [
+        "description"
+      ]
     }
   },
   "type": "object",
