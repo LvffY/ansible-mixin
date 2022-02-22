@@ -27,7 +27,6 @@ func TestMixin_ValidateSchema(t *testing.T) {
 	// Load the mixin schema
 	schemaLoader := gojsonschema.NewStringLoader(schema)
 
-	// TODO: Add testcases for any other action inputs you have in testdata
 	// This validates that your schema.json is filled in properly
 	testcases := []struct {
 		name      string
