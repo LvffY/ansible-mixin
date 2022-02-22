@@ -1,8 +1,9 @@
 install:
   - ansible:
-      description: "Run our ansible adhoc command"
-      playbook: 
+      description: "Run our ansible playbook"
+      adhoc: 
         arguments:
-          - "playbook.yml"
+          - "localhost"
         flags:
-          inventory: "hosts"
+          module-name: "debug"
+          args: "msg='Hello from ansible AdHoc command !'"
