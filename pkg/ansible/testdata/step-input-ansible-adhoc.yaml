@@ -1,6 +1,6 @@
 install:
   - ansible:
-      description: "Run our ansible playbook"
+      description: "Run our ansible adhoc command"
       adhoc: 
         arguments:
           - "localhost"
