@@ -73,6 +73,30 @@ func TestMixin_UnmarshalStep(t *testing.T) {
 			expectedWorkingDir: "/working/dir",
 			suppressesOutput: true,
 		},
+		{
+			name: "Playbook install with arbitrary fields", 
+			file: "testdata/action_test/playbook/arbitrary_fields.yaml", 
+			expectedActionName: "install",
+			expectedDescription: "Run our ansible playbook command with arbitrary fields" , 
+			expectedArguments: []string{"playbook.yml"}, 
+			expectedFlags: builder.Flags{builder.NewFlag("inventory", "my_inventory.yml")}, 
+			expectedCommand: "ansible-playbook",
+			expectedSuffixArgs: []string(nil),
+			expectedWorkingDir: "",
+			suppressesOutput: false,
+		},
+		{
+			name: "Playbook install with all fields", 
+			file: "testdata/action_test/playbook/all_fields.yaml", 
+			expectedActionName: "install",
+			expectedDescription: "Run our ansible playbook command with all fields" , 
+			expectedArguments: []string{"playbook.yml"}, 
+			expectedFlags: builder.Flags{builder.NewFlag("inventory", "my_inventory.yml")}, 
+			expectedCommand: "ansible-playbook",
+			expectedSuffixArgs: []string{"suffixArg"},
+			expectedWorkingDir: "/dir/playbooks",
+			suppressesOutput: true,
+		},
 	}
 
 	for _, tc := range testcases {

@@ -1,0 +1,12 @@
+install:
+  - ansible:
+      description: "Run our ansible playbook command with all fields"
+      playbook: 
+        arguments:
+          - "playbook.yml"
+        flags:
+          inventory: "my_inventory.yml"
+        dir: "/dir/playbooks"
+        suppress-output: true
+        suffix-arguments:
+          - "suffixArg"
