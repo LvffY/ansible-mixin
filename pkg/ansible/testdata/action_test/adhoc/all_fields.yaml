@@ -9,6 +9,4 @@ install:
           module-name: "debug"
           args: "var=variable_name"
         dir: "/working/dir"
-        outputs:
-          - name: "VICTORY"
-            jsonPath: "$Id"
+        suppress-output: true

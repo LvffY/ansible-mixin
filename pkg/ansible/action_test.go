@@ -23,10 +23,11 @@ func TestMixin_UnmarshalStep(t *testing.T) {
 		expectedCommand  string      // Command that you expect to be found
 		expectedSuffixArgs  []string      // Suffix arguments that you expect to be found
 		expectedWorkingDir  string      // WorkingDir that you expect to be found
+		suppressesOutput  bool      // SuppressesOutput that you expect to be found
 	}{
 		{
 			name: "AdHoc install no outputs", 
-			file: "testdata/action_test/adhoc/no_outputs.yaml", 
+			file: "testdata/action_test/adhoc/arbitrary_fields.yaml", 
 			expectedActionName: "install",
 			expectedDescription: "Run our ansible adhoc command" , 
 			expectedArguments: []string{"localhost"}, 
@@ -34,10 +35,11 @@ func TestMixin_UnmarshalStep(t *testing.T) {
 			expectedCommand: "ansible",
 			expectedSuffixArgs: []string{},
 			expectedWorkingDir: "",
+			suppressesOutput: false,
 		},
 		{
 			name: "AdHoc install with outputs", 
-			file: "testdata/action_test/adhoc/with_outputs.yaml", 
+			file: "testdata/action_test/adhoc/all_fields.yaml", 
 			expectedActionName: "install",
 			expectedDescription: "Run our ansible adhoc command and capture output" , 
 			expectedArguments: []string{"host_pattern*"}, 
@@ -45,6 +47,7 @@ func TestMixin_UnmarshalStep(t *testing.T) {
 			expectedCommand: "ansible",
 			expectedSuffixArgs: []string{},
 			expectedWorkingDir: "/working/dir",
+			suppressesOutput: true,
 		},
 	}
 
@@ -108,6 +111,13 @@ func TestMixin_UnmarshalStep(t *testing.T) {
 				tc.expectedWorkingDir, 
 				workingDir, 
 				fmt.Sprintf("Bad working dir. Received %s while expected %s", workingDir, tc.expectedWorkingDir),
+			)
+
+			suppressesOutput := step.SuppressesOutput()
+			assert.Equal(t, 
+				tc.suppressesOutput, 
+				suppressesOutput, 
+				fmt.Sprintf("Bad suppresses output. Received %v while expected %v", suppressesOutput, tc.suppressesOutput),
 			)
 		})
 	}
