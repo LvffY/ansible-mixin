@@ -6,4 +6,4 @@ install:
           - "localhost"
         flags:
           module-name: "debug"
-          args: "msg='Hello from ansible AdHoc command !'"
+          args: "msg=adhoc"

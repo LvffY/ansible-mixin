@@ -24,10 +24,11 @@ func TestMixin_Execute(t *testing.T) {
 		wantOutput  string // Name of output that you expect to be created
 		wantCommand string // Full command that you expect to be called based on the input YAML
 	}{
-		{"action", "testdata/step-input.yaml", "VICTORY",
-			"ansible man-e-faces --species human"},
+		{"action", "testdata/step-input-ansible-adhoc.yaml", "", "ansible localhost --args msg=adhoc --module-name debug"},
+		{"action", "testdata/step-input-ansible-galaxy.yaml", "", "ansible-galaxy collection install community.general"},
+		{"action", "testdata/step-input-ansible-playbook.yaml", "", "ansible-playbook playbook.yml --inventory hosts"},
 	}
-
+	
 	defer os.Unsetenv(test.ExpectedCommandEnv)
 	for _, tc := range testcases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -36,11 +37,11 @@ func TestMixin_Execute(t *testing.T) {
 			m.Setenv(test.ExpectedCommandEnv, tc.wantCommand)
 			mixinInputB, err := ioutil.ReadFile(tc.file)
 			require.NoError(t, err)
-
+			
 			m.In = bytes.NewBuffer(mixinInputB)
-
+			
 			err = m.Execute()
-			require.NoError(t, err, "execute failed")
+			require.NoError(t, err, "Execute failed. Please check your ouput and especially your GOTCOMMAND and WANTCOMMAND values.")
 
 			if tc.wantOutput == "" {
 				outputs, _ := m.FileSystem.ReadDir("/cnab/app/porter/outputs")
