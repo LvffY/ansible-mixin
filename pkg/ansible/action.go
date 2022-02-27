@@ -2,6 +2,8 @@ package ansible
 
 import (
 	"get.porter.sh/porter/pkg/exec/builder"
+	"github.com/pkg/errors"
+	"gopkg.in/yaml.v2"
 )
 
 var _ builder.ExecutableAction = Action{}
@@ -9,7 +11,7 @@ var _ builder.BuildableAction = Action{}
 
 type Action struct {
 	Name  string
-	Steps []Step // using UnmarshalYAML so that we don't need a custom type per action
+	Steps []AnsibleStep // using UnmarshalYAML so that we don't need a custom type per action
 }
 
 // MarshalYAML converts the action back to a YAML representation
@@ -22,7 +24,7 @@ func (a Action) MarshalYAML() (interface{}, error) {
 
 // MakeSteps builds a slice of Step for data to be unmarshaled into.
 func (a Action) MakeSteps() interface{} {
-	return &[]Step{}
+	return &[]AnsibleStep{}
 }
 
 // UnmarshalYAML takes any yaml in this form
@@ -38,7 +40,7 @@ func (a *Action) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	for actionName, action := range results {
 		a.Name = actionName
 		for _, result := range action {
-			step := result.(*[]Step)
+			step := result.(*[]AnsibleStep)
 			a.Steps = append(a.Steps, *step...)
 		}
 		break // There is only 1 action
@@ -60,6 +62,12 @@ type Step struct {
 	Instruction `yaml:"ansible"`
 }
 
+type AnsibleStep struct {
+	Description string
+	AnsibleInstruction
+	Output
+}
+
 // Actions is a set of actions, and the steps, passed from Porter.
 type Actions []Action
 
@@ -73,20 +81,41 @@ type Actions []Action
 // upgrade:
 //   ansible:
 //     ...
-func (a *Actions) UnmarshalYAML(unmarshal func(interface{}) error) error {
-	results, err := builder.UnmarshalAction(unmarshal, Action{})
+func (a *AnsibleStep) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	// Turn the yaml into a raw map so we can iterate over the values and
+	// look for which command was used
+	stepMap := map[string]map[string]interface{}{}
+	err := unmarshal(&stepMap)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "Could not unmarshal yaml into a raw ansible command")
 	}
 
-	for actionName, action := range results {
-		for _, result := range action {
-			s := result.(*[]Step)
-			*a = append(*a, Action{
-				Name:  actionName,
-				Steps: *s,
-			})
+	// get at the values defined under "ansible"
+	ansibleStep := stepMap["ansible"]
+
+	for actionName, action := range ansibleStep {
+		var cmd AnsibleInstruction
+		switch actionName {
+		case "description":
+			a.Description = action.(string)
+			continue
+		case "adhoc":
+			cmd = &AdhocCommand{}
+		default:
+			return errors.Errorf("Unsupported ansible mixin command %s", actionName)
 		}
+
+		b, err := yaml.Marshal(action)
+		if err != nil {
+			return err
+		}
+
+		err = yaml.Unmarshal(b, cmd)
+		if err != nil {
+			return err
+		}
+
+		a.AnsibleInstruction = cmd
 	}
 	return nil
 }
@@ -147,6 +176,14 @@ func (s Instruction) GetOutputs() []builder.Output {
 	}
 	return outputs
 }
+
+type AnsibleInstruction interface {
+	builder.ExecutableStep
+	builder.HasOrderedArguments
+	builder.SuppressesOutput
+}
+
+var _ AnsibleInstruction = Instruction{}
 
 var _ builder.OutputJsonPath = Output{}
 var _ builder.OutputFile = Output{}
