@@ -50,9 +50,13 @@ func (c AdhocCommand) GetFlags() builder.Flags {
 }
 
 func (c AdhocCommand) SuppressesOutput() bool {
-	return false
+	return c.SuppressOutput
 }
 
 func (c AdhocCommand) GetWorkingDir() string {
-	return c.GetWorkingDir()
+	return c.WorkingDir
+}
+
+func (c AdhocCommand) GetOutputs() []Output {
+	return c.Outputs
 }

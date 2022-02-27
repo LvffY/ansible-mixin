@@ -5,8 +5,6 @@ import (
 	"sort"
 	"testing"
 
-	//"get.porter.sh/porter/pkg/exec/builder"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"get.porter.sh/porter/pkg/exec/builder"
@@ -24,7 +22,7 @@ func TestMixin_UnmarshalStep(t *testing.T) {
 		expectedFlags       builder.Flags // Flags that you expect to be found
 		expectedCommand  string      // Command that you expect to be found
 		expectedSuffixArgs  []string      // Suffix arguments that you expect to be found
-		expectedOutputs    Output			// Output struct that you expect to be found
+		expectedWorkingDir  string      // WorkingDir that you expect to be found
 	}{
 		{
 			name: "AdHoc install no outputs", 
@@ -35,7 +33,18 @@ func TestMixin_UnmarshalStep(t *testing.T) {
 			expectedFlags: builder.Flags{builder.NewFlag("module-name", "debug"), builder.NewFlag("args", "msg='Hello from ansible AdHoc command !'")}, 
 			expectedCommand: "ansible",
 			expectedSuffixArgs: []string{},
-			expectedOutputs: Output{},
+			expectedWorkingDir: "",
+		},
+		{
+			name: "AdHoc install with outputs", 
+			file: "testdata/action_test/adhoc/with_outputs.yaml", 
+			expectedActionName: "install",
+			expectedDescription: "Run our ansible adhoc command and capture output" , 
+			expectedArguments: []string{"host_pattern*"}, 
+			expectedFlags: builder.Flags{builder.NewFlag("module-name", "debug"), builder.NewFlag("args", "var=variable_name"), builder.NewFlag("inventory", "/etc/ansible/hosts")}, 
+			expectedCommand: "ansible",
+			expectedSuffixArgs: []string{},
+			expectedWorkingDir: "/working/dir",
 		},
 	}
 
@@ -94,11 +103,11 @@ func TestMixin_UnmarshalStep(t *testing.T) {
 				fmt.Sprintf("Bad suffix args. Received %s while expected %s", suffixArgs, tc.expectedSuffixArgs),
 			)
 
-			outputs := step.Output
+			workingDir := step.GetWorkingDir()
 			assert.Equal(t, 
-				tc.expectedOutputs, 
-				outputs, 
-				fmt.Sprintf("Bad outputs. Received %s while expected %s", outputs, tc.expectedOutputs),
+				tc.expectedWorkingDir, 
+				workingDir, 
+				fmt.Sprintf("Bad working dir. Received %s while expected %s", workingDir, tc.expectedWorkingDir),
 			)
 		})
 	}

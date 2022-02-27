@@ -1,0 +1,14 @@
+install:
+  - ansible:
+      description: "Run our ansible adhoc command and capture output"
+      adhoc: 
+        arguments:
+          - "host_pattern*"
+        flags:
+          inventory: "/etc/ansible/hosts"
+          module-name: "debug"
+          args: "var=variable_name"
+        dir: "/working/dir"
+        outputs:
+          - name: "VICTORY"
+            jsonPath: "$Id"

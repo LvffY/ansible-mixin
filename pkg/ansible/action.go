@@ -59,13 +59,12 @@ func (a Action) GetSteps() []builder.ExecutableStep {
 }
 
 type Step struct {
-	Instruction `yaml:"ansible"`
+	AnsibleStep `yaml:"ansible"`
 }
 
 type AnsibleStep struct {
 	Description string
 	AnsibleInstruction
-	Output
 }
 
 // Actions is a set of actions, and the steps, passed from Porter.
@@ -193,7 +192,6 @@ type Output struct {
 	Name string `yaml:"name"`
 
 	// See https://porter.sh/mixins/exec/#outputs
-	// TODO: If your mixin doesn't support these output types, you can remove these and the interface assertions above, and from #/definitions/outputs in schema.json
 	JsonPath string `yaml:"jsonPath,omitempty"`
 	FilePath string `yaml:"path,omitempty"`
 	Regex    string `yaml:"regex,omitempty"`
