@@ -100,6 +100,8 @@ func (a *AnsibleStep) UnmarshalYAML(unmarshal func(interface{}) error) error {
 			continue
 		case "adhoc":
 			cmd = &AdhocCommand{}
+		case "galaxy":
+			cmd = &GalaxyCommand{}
 		default:
 			return errors.Errorf("Unsupported ansible mixin command %s", actionName)
 		}

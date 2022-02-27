@@ -1,6 +1,6 @@
 install:
   - ansible:
-      description: "Run our ansible adhoc command"
+      description: "Run our ansible adhoc command with arbitrary fields"
       adhoc: 
         arguments:
           - "localhost"

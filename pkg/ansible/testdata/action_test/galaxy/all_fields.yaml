@@ -1,0 +1,14 @@
+install:
+  - ansible:
+      description: "Run our ansible galaxy command with all fields"
+      galaxy: 
+        arguments:
+          - "role"
+          - "install"
+          - "namespace.role_name"
+        flags:
+          roles-path: "roles"
+        dir: "/working/dir"
+        suppress-output: true
+        suffix-arguments:
+          - "suffix1"

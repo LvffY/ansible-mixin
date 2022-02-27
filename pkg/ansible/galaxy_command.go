@@ -4,9 +4,9 @@ import (
 	"get.porter.sh/porter/pkg/exec/builder"
 )
 
-var _ AnsibleInstruction = AdhocCommand{}
+var _ AnsibleInstruction = GalaxyCommand{}
 
-type AdhocCommand struct {
+type GalaxyCommand struct {
 	Name        string   `yaml:"name"`
 	Description string   `yaml:"description"`
 	WorkingDir  string   `yaml:"dir,omitempty"`
@@ -26,15 +26,15 @@ type AdhocCommand struct {
 	builder.IgnoreErrorHandler `yaml:"ignoreError,omitempty"`
 }
 
-func (c AdhocCommand) GetSuffixArguments() []string {
+func (c GalaxyCommand) GetSuffixArguments() []string {
 	return c.SuffixArguments
 }
 
-func (c AdhocCommand) GetCommand() string {
-	return "ansible"
+func (c GalaxyCommand) GetCommand() string {
+	return "ansible-galaxy"
 }
 
-func (c AdhocCommand) GetArguments() []string {
+func (c GalaxyCommand) GetArguments() []string {
 	// Final Command: ansible ARGUMENTS --FLAGS
 
 	args := []string{}
@@ -43,16 +43,20 @@ func (c AdhocCommand) GetArguments() []string {
 	return args
 }
 
-func (c AdhocCommand) GetFlags() builder.Flags {
+func (c GalaxyCommand) GetFlags() builder.Flags {
 	var flags builder.Flags
 	flags = append(flags, c.Flags...)
 	return flags
 }
 
-func (c AdhocCommand) SuppressesOutput() bool {
+func (c GalaxyCommand) SuppressesOutput() bool {
 	return c.SuppressOutput
 }
 
-func (c AdhocCommand) GetWorkingDir() string {
+func (c GalaxyCommand) GetWorkingDir() string {
 	return c.WorkingDir
+}
+
+func (c GalaxyCommand) GetOutputs() []Output {
+	return c.Outputs
 }

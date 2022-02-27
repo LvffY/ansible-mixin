@@ -1,6 +1,6 @@
 install:
   - ansible:
-      description: "Run our ansible adhoc command and capture output"
+      description: "Run our ansible adhoc command with all fields"
       adhoc: 
         arguments:
           - "host_pattern*"
@@ -10,3 +10,6 @@ install:
           args: "var=variable_name"
         dir: "/working/dir"
         suppress-output: true
+        suffix-arguments:
+          - "foo"
+          - "bar"

@@ -1,0 +1,11 @@
+install:
+  - ansible:
+      description: "Run our ansible galaxy command with arbitrary fields"
+      galaxy: 
+        arguments:
+          - "collection"
+          - "install"
+          - "community.general"
+        flags:
+          collection-path: "collections"
+          force: ""
