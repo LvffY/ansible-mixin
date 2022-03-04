@@ -19,6 +19,9 @@ You also have the option to add some custom installations setup :
 ```yaml
 mixins:
 - ansible:
+   ## If you want to install a specific Ansible version.
+   ## You need to define the version specifier for pip. See https://www.python.org/dev/peps/pep-0440/#version-specifiers.
+   clientVersion: "==2.10" 
    otherPipDependencies: ## Python modules to install with Ansible
       - jmespath 
    requirementsFiles: ## Possibly your python dependencies can be in some requirements files
