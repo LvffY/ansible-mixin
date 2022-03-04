@@ -1,0 +1,18 @@
+config:
+  clientVersion: "==2.10"
+  otherPipDependencies:
+     - jmespath 
+  requirementsFiles:
+     - requirements.txt
+  constraintsFiles:
+     - constraints.txt
+install:
+  - ansible:
+      description: "Summon Minion"
+      arguments:
+      - "man-e-faces"
+      flags:
+        species: "human"
+      outputs:
+        - name: "VICTORY"
+          jsonPath: "$Id"

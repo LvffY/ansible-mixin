@@ -1,45 +1,50 @@
 package ansible
 
 import (
+	"bytes"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"io/ioutil"
 )
 
 func TestMixinBuildWithDefaults(t *testing.T) {
+	b, err := ioutil.ReadFile("testdata/build_test/build-input-without-config.yaml")
+	require.NoError(t, err)
+
 	m := NewTestMixin(t)
+	m.Debug = false
+	m.In = bytes.NewReader(b)
 
-	err := m.Build()
-	require.NoError(t, err, "Build failed")
-
-	gotOutput := m.TestContext.GetOutput()
+	err = m.Build()
+	require.NoError(t, err, "build failed")
 
 	wantOutput := `RUN pip install --upgrade --no-cache-dir pip && \
 	pip install --upgrade --no-cache-dir setuptools wheel && \
 	pip install --upgrade --no-cache-dir 'ansible'   
 	`
 
+	gotOutput := m.TestContext.GetOutput()
 	assert.Equal(t, wantOutput, gotOutput)
 }
 
-// TODO: Add unit tests with some non defaults values
-/* func TestMixinBuildWithoutDefault(t *testing.T) {
+func TestMixinBuildWithoutDefault(t *testing.T) {
+
+	b, err := ioutil.ReadFile("testdata/build_test/build-input-with-config.yaml")
+	require.NoError(t, err)
+
 	m := NewTestMixin(t)
+	m.Debug = false
+	m.In = bytes.NewReader(b)
 
-	m.ClientVersion = "<2.10"
-	m.RequirementsFiles = []string{"requirements.txt", "http://host.com/requirements.txt"}
-	m.ConstraintsFiles = []string{"constraints.txt", "http://host.com/constraints.txt"}
-	m.OtherPipDependencies = []string{"aPythonDep", "anotherPythonDep<specificVersion"}
-
-	err := m.Build()
-	require.NoError(t, err, "Build failed")
-
-	gotOutput := m.TestContext.GetOutput()
+	err = m.Build()
+	require.NoError(t, err, "build failed")
 
 	wantOutput := `RUN pip install --upgrade --no-cache-dir pip && \
 	pip install --upgrade --no-cache-dir setuptools wheel && \
-	pip install --upgrade --no-cache-dir 'ansible<2.10' 'aPythonDep' 'anotherPythonDep<specificVersion' --requirement 'requirements.txt' --requirement 'http://host.com/requirements.txt' --constraint 'constraints.txt' --constraint 'http://host.com/constraints.txt'
+	pip install --upgrade --no-cache-dir 'ansible==2.10' 'jmespath' --requirement 'requirements.txt' --constraint 'constraints.txt'
 	`
 
+	gotOutput := m.TestContext.GetOutput()
 	assert.Equal(t, wantOutput, gotOutput)
-} */
+}
