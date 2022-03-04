@@ -45,7 +45,7 @@ func Test() {
 func Publish() {
 	// You can test out publishing locally by overriding PORTER_RELEASE_REPOSITORY and PORTER_PACKAGES_REMOTE
 	if _, overridden := os.LookupEnv(releases.ReleaseRepository); !overridden {
-		os.Setenv(releases.ReleaseRepository, "github.com/LvffY/ansible")
+		os.Setenv(releases.ReleaseRepository, "github.com/LvffY/ansible-mixin")
 	}
 	magefile.PublishBinaries()
 
