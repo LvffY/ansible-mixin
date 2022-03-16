@@ -16,7 +16,7 @@ import (
 
 const (
 	mixinName    = "ansible"
-	mixinPackage = "get.porter.sh/mixin/ansible"
+	mixinPackage = "github.com/LvffY/ansible"
 	mixinBin     = "bin/mixins/" + mixinName
 )
 
