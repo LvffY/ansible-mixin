@@ -1,14 +1,9 @@
-//go:build mage
 // +build mage
 
 package main
 
 import (
-	"os"
-
 	"get.porter.sh/porter/mage/mixins"
-	"get.porter.sh/porter/mage/releases"
-
 	// Import common targets that all mixins should expose to the user
 	// mage:import
 	_ "get.porter.sh/porter/mage"
@@ -43,18 +38,12 @@ func Test() {
 
 // Publish the mixin to github
 func Publish() {
-	// You can test out publishing locally by overriding PORTER_RELEASE_REPOSITORY and PORTER_PACKAGES_REMOTE
-	if _, overridden := os.LookupEnv(releases.ReleaseRepository); !overridden {
-		os.Setenv(releases.ReleaseRepository, "github.com/LvffY/ansible-mixin")
-	}
-	magefile.PublishBinaries()
+	magefile.Publish()
+}
 
-	// TODO: uncomment out the lines below to publish a mixin feed
-	// Set PORTER_PACKAGES_REMOTE to a repository that will contain your mixin feed, similar to github.com/getporter/packages
-	//if _, overridden := os.LookupEnv(releases.PackagesRemote); !overridden {
-	//	os.Setenv("PORTER_PACKAGES_REMOTE", "git@github.com:LvffY/YOUR_PACKAGES_REPOSITORY")
-	//}
-	//magefile.PublishMixinFeed()
+// Test the publish logic against your github fork
+func TestPublish(username string) {
+	magefile.TestPublish(username)
 }
 
 // Install the mixin
