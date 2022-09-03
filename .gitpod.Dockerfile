@@ -9,7 +9,7 @@ RUN pip install --upgrade pip && \
     pip install --upgrade setuptools wheel && \
     pip install --upgrade ansible && \
     ## Install Porter
-    curl -L https://cdn.porter.sh/$VERSION/install-mac.sh | bash
+    curl -L https://cdn.porter.sh/$VERSION/install-linux.sh | bash
 
 
 ENTRYPOINT []
