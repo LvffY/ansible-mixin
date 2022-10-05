@@ -1,12 +1,12 @@
-// +build mage
+//go:build mage
 
 package main
 
 import (
-	"get.porter.sh/porter/mage/mixins"
-	// Import common targets that all mixins should expose to the user
-	// mage:import
-	_ "get.porter.sh/porter/mage"
+	"os"
+
+	"get.porter.sh/magefiles/mixins"
+	"get.porter.sh/magefiles/releases"
 )
 
 const (
@@ -17,31 +17,50 @@ const (
 
 var magefile = mixins.NewMagefile(mixinPackage, mixinName, mixinBin)
 
+// ConfigureAgent sets up the CI server with mage and GO
+func ConfigureAgent() {
+	magefile.ConfigureAgent()
+}
+
 // Build the mixin
 func Build() {
 	magefile.Build()
 }
 
-// Cross-compile the mixin before a release
+// XBuildAll cross-compiles the mixin before a release
 func XBuildAll() {
 	magefile.XBuildAll()
 }
 
-// Run unit tests
+// TestUnit runs the unit tests
 func TestUnit() {
 	magefile.TestUnit()
 }
 
+// Test runs all types of tests
 func Test() {
 	magefile.Test()
 }
 
-// Publish the mixin to github
+// Publish the mixin to GitHub
 func Publish() {
-	magefile.Publish()
+	// You can test out publishing locally by overriding PORTER_RELEASE_REPOSITORY and PORTER_PACKAGES_REMOTE
+	if _, overridden := os.LookupEnv(releases.ReleaseRepository); !overridden {
+		os.Setenv(releases.ReleaseRepository, "github.com/LvffY/ansible-mixin")
+	}
+	magefile.PublishBinaries()
+
+	// TODO: uncomment out the lines below to publish a mixin feed
+	// Set PORTER_PACKAGES_REMOTE to a repository that will contain your mixin feed, similar to github.com/getporter/packages
+	//if _, overridden := os.LookupEnv(releases.PackagesRemote); !overridden {
+	//	os.Setenv("PORTER_PACKAGES_REMOTE", "git@github.com:YOURNAME/YOUR_PACKAGES_REPOSITORY")
+	//}
+	//magefile.PublishMixinFeed()
 }
 
-// Test the publish logic against your github fork
+// TestPublish publishes the project to the specified GitHub username.
+// If your mixin is official hosted in a repository under your username, you will need to manually
+// override PORTER_RELEASE_REPOSITORY and PORTER_PACKAGES_REMOTE to test out publishing safely.
 func TestPublish(username string) {
 	magefile.TestPublish(username)
 }
@@ -51,7 +70,7 @@ func Install() {
 	magefile.Install()
 }
 
-// Remove generated build files
+// Clean removes generated build files
 func Clean() {
 	magefile.Clean()
 }
