@@ -19,11 +19,6 @@ type AdhocCommand struct {
 	Flags          builder.Flags `yaml:"flags,omitempty"`
 	Outputs        []Output      `yaml:"outputs,omitempty"`
 	SuppressOutput bool          `yaml:"suppress-output,omitempty"`
-
-	// Allow the user to ignore some errors
-	// Adds the ignoreError functionality from the exec mixin
-	// https://release-v1.porter.sh/mixins/exec/#ignore-error
-	builder.IgnoreErrorHandler `yaml:"ignoreError,omitempty"`
 }
 
 func (c AdhocCommand) GetSuffixArguments() []string {
